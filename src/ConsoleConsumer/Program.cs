@@ -10,16 +10,20 @@ namespace ConsoleConsumer
     {
         static void Main(string[] args)
         {
-            if (args.Length != 1)
+            var conf = new ConsumerConfig
             {
-                Console.WriteLine("Please provide the configuration file path as a command line argument");
-            }
+                GroupId = "st_consumer_group",
+                BootstrapServers = "localhost:9092",
+                AutoOffsetReset = AutoOffsetReset.Earliest
+            };
 
-            IConfiguration configuration = new ConfigurationBuilder().AddIniFile(args[0]).Build();
-
-            configuration["group.id"] = "kafka-dotnet-getting-started";
-            configuration["auto.offset.reset"] = "earliest";
-
+            //if (args.Length != 1)
+            //{
+            //    Console.WriteLine("Please provide the configuration file path as a command line argument");
+            //}
+            //IConfiguration configuration = new ConfigurationBuilder().AddIniFile(args[0]).Build();
+            //configuration["group.id"] = "kafka-dotnet-getting-started";
+            //configuration["auto.offset.reset"] = "earliest";
             const string topic = "purchases";
 
             CancellationTokenSource cts = new CancellationTokenSource();
@@ -27,9 +31,10 @@ namespace ConsoleConsumer
                 e.Cancel = true; // prevent the process from terminating.
                 cts.Cancel();
             };
+            
+            //using (var builder = new ConsumerBuilder<Ignore, string>(conf).Build())
 
-            using (var consumer = new ConsumerBuilder<string, string>(
-                configuration.AsEnumerable()).Build())
+            using (var consumer = new ConsumerBuilder<string, string>(conf).Build())
             {
                 consumer.Subscribe(topic);
                 try
