@@ -1,12 +1,11 @@
 ﻿using Confluent.Kafka;
 using System;
-using Microsoft.Extensions.Configuration;
 
 namespace ConsoleProducerV2
 {
-    public class EventPublisher
+    static public class EventPublisher //According to the documentation static is a good option.
     {
-        public void PublishEvent(string topic = "", string key = "", string value = "")
+        static public void PublishEvent(string topic = "", string key = "", string value = "")
         {
             using (var producer = new ProducerBuilder<string, string>(new ProducerConfig { BootstrapServers = "localhost:9092" }).Build())
             {
@@ -18,7 +17,7 @@ namespace ConsoleProducerV2
                             }
                     });
                 producer.Flush(TimeSpan.FromSeconds(10));
-            } //Using
-        } //method
-    } //class
-} //namespace
+            }
+        }
+    }
+}

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ConsoleProducerV2
 {
@@ -6,15 +8,16 @@ namespace ConsoleProducerV2
     {
         static void Main()
         {
+            EventGenerator eventGenerator1 = new();
+            EventGenerator eventGenerator2 = new();
+            EventGenerator eventGenerator3 = new();
 
+            new Task(() => eventGenerator1.EventProducer("Marketing", "Tea pot", "+1", 1000)).Start();
+            new Task(() => eventGenerator2.EventProducer("Inventory", "Tea pot", "-1", 1000)).Start();
+            new Task(() => eventGenerator2.EventProducer("Basket", "Tea pot", "+1", 1000)).Start();
 
-            Producer producer1 = new();
-            producer1.EventProducer();
-
-
+            Console.WriteLine("Press any key to exit");
             Console.ReadLine();
-
-
         }
     }
 }
