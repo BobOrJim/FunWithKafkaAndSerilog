@@ -1,38 +1,28 @@
-﻿using Confluent.Kafka;
-using System;
+﻿using System;
+using Confluent.Kafka;
 using System.Threading;
 using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
-
-namespace ConsoleConsumer
+namespace ConsoleConsumerV2
 {
-    class Program
+    public class EventConsumer
     {
-        static void Main(string[] args)
+        public void ConsumeEvent(string topic = "", string key = "", string value = "")
         {
             var conf = new ConsumerConfig
             {
-                GroupId = "st_consumer_group",
+                GroupId = "hpax_consumer_group",
                 BootstrapServers = "localhost:9092",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
-            //if (args.Length != 1)
-            //{
-            //    Console.WriteLine("Please provide the configuration file path as a command line argument");
-            //}
-            //IConfiguration configuration = new ConfigurationBuilder().AddIniFile(args[0]).Build();
-            //configuration["group.id"] = "kafka-dotnet-getting-started";
-            //configuration["auto.offset.reset"] = "earliest";
-            const string topic = "purchases";
-
             CancellationTokenSource cts = new CancellationTokenSource();
-            Console.CancelKeyPress += (_, e) => {
-                e.Cancel = true; // prevent the process from terminating.
+            Console.CancelKeyPress += (_, e) => 
+            { 
+                e.Cancel = true; 
                 cts.Cancel();
             };
-            
-            //using (var builder = new ConsumerBuilder<Ignore, string>(conf).Build())
 
             using (var consumer = new ConsumerBuilder<string, string>(conf).Build())
             {
@@ -47,7 +37,6 @@ namespace ConsoleConsumer
                 }
                 catch (OperationCanceledException)
                 {
-                    // Ctrl-C was pressed.
                 }
                 finally
                 {
@@ -55,5 +44,6 @@ namespace ConsoleConsumer
                 }
             }
         }
+
     }
 }
