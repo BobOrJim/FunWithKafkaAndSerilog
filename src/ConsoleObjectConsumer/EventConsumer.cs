@@ -3,8 +3,10 @@ using Confluent.Kafka;
 using System.Threading;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
+using Common;
+using System.Text.Json;
 
-namespace ConsoleConsumerV2
+namespace ConsoleObjectConsumer
 {
     public class EventConsumer
     {
@@ -32,7 +34,9 @@ namespace ConsoleConsumerV2
                     while (true)
                     {
                         var cr = consumer.Consume(cts.Token);
-                        Console.WriteLine($"Consumed event from topic {topic} with key {cr.Message.Key,-10} and value {cr.Message.Value}");
+                        Stuff stuff = JsonSerializer.Deserialize<Stuff>(cr.Message.Value);
+                        //Console.WriteLine($"Consumed event from topic {topic} with key {cr.Message.Key,-10} and value {cr.Message.Value}");
+                        Console.WriteLine($"Number as int: {stuff.MyInt}. Number as string {stuff.MyString}");
                     }
                 }
                 catch (OperationCanceledException)

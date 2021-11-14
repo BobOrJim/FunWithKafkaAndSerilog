@@ -23,9 +23,6 @@ namespace ConsoleObjectProducer
             string jsonString2 = JsonSerializer.Serialize<Stuff>(stuff2);
             string jsonString3 = JsonSerializer.Serialize<Stuff>(stuff3);
 
-
-            //WeatherForecast weatherForecast = JsonSerializer.Deserialize<WeatherForecast>(jsonString);
-
             //Topic key value
             new Task(() => eventGenerator1.EventProducer("Marketing", "CoolKey", jsonString1, 1000)).Start();
             new Task(() => eventGenerator2.EventProducer("Inventory", "CoolKey", jsonString2, 1000)).Start();
